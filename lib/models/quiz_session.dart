@@ -13,7 +13,7 @@ class QuizSession with ChangeNotifier {
   Question get currentQuestion => _questions[_currentQuestionIndex];
 
   void nextQuestion() {
-    _currentQuestionIndex = _currentQuestionIndex + 1 >= _questions.length ? _currentQuestionIndex++ : null;
+    _currentQuestionIndex = _currentQuestionIndex + 1 < _questions.length -1 ? _currentQuestionIndex++ : null;
     notifyListeners();
   }
 
