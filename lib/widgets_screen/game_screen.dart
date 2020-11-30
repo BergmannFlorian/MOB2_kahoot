@@ -27,7 +27,16 @@ class GameScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text("Score : "+session.score.toString(), textScaleFactor: 2.0)
+            Text("Score : "+session.score.toString(), textScaleFactor: 2.0),
+            ElevatedButton(
+              onPressed: () {
+                session.reset();
+              },
+              child: SizedBox(
+                width: double.infinity,
+                child: Text("New Game", textScaleFactor: 2.0, textAlign: TextAlign.center)
+              )
+            )
           ],
         ),
       );
