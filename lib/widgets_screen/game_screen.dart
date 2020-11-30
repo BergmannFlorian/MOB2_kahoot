@@ -21,29 +21,40 @@ class GameScreen extends StatelessWidget {
   }
 
   Widget buildQuestion(BuildContext context, Question question) {
-    var answerButtons = question.answers.map((answer) {
-      return ElevatedButton(
-        onPressed: () {
-          var session = Provider.of<QuizSession>(context, listen: false);
-          if (session.checkAnswer(answer)) {
-            session.nextQuestion();
-          }
-        },
-        child: SizedBox(
-          width: double.infinity,
-          child: Text(answer, textScaleFactor: 2.0, textAlign: TextAlign.center)
-        )
+    var session = Provider.of<QuizSession>(context, listen: false);
+    if(session.isCompleted()){
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text("Score : "+session.score.toString(), textScaleFactor: 2.0)
+          ],
+        ),
       );
-    });
+    }else{
+      var answerButtons = question.answers.map((answer) {
+        return ElevatedButton(
+          onPressed: () {
+            if (session.checkAnswer(answer)) {
+              session.nextQuestion();
+            }
+          },
+          child: SizedBox(
+            width: double.infinity,
+            child: Text(answer, textScaleFactor: 2.0, textAlign: TextAlign.center)
+          )
+        );
+      });
 
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(question.caption, textScaleFactor: 2.0),
-          ...answerButtons,
-        ],
-      ),
-    );
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(question.caption, textScaleFactor: 2.0),
+            ...answerButtons,
+          ],
+        ),
+      );
+    }
   }
 }
