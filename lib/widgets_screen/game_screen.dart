@@ -35,9 +35,8 @@ class GameScreen extends StatelessWidget {
       var answerButtons = question.answers.map((answer) {
         return ElevatedButton(
           onPressed: () {
-            if (session.checkAnswer(answer)) {
-              session.nextQuestion();
-            }
+            session.checkAnswer(answer);
+            session.nextQuestion();
           },
           child: SizedBox(
             width: double.infinity,
@@ -52,6 +51,14 @@ class GameScreen extends StatelessWidget {
           children: <Widget>[
             Text(question.caption, textScaleFactor: 2.0),
             ...answerButtons,
+            Text(session.currentQuestionHint),
+            FloatingActionButton(
+              onPressed: () {
+                session.toogleHint();
+              },
+              child: Icon(Icons.help),
+              backgroundColor: Colors.blue,
+            ),
           ],
         ),
       );

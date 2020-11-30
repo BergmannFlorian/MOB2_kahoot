@@ -9,12 +9,15 @@ class QuizSession with ChangeNotifier {
     Question("May the Force be with you", ["Star Wars", "Forest Gump", "American Pie"], "Star Wars", "Skywalker"),
   ];
   var _currentQuestionIndex = 0;
+  var _showHint = false;
 
   Question get currentQuestion => _currentQuestionIndex < _questions.length ? _questions[_currentQuestionIndex] : null;
   int get score => _score;
+  String get currentQuestionHint => _showHint ? currentQuestion.hint : "";
 
   void nextQuestion() {
     _currentQuestionIndex++;
+    _showHint = false;
     notifyListeners();
   }
 
@@ -28,4 +31,10 @@ class QuizSession with ChangeNotifier {
   bool isCompleted(){
     return _currentQuestionIndex >= _questions.length;
   }
+
+  void toogleHint(){
+    _showHint = !_showHint;
+    notifyListeners();
+  }
+
 }
