@@ -1,47 +1,70 @@
 import 'package:flutter/foundation.dart';
 import 'package:quiz/models/question.dart';
+import 'package:quiz/models/question_repository.dart';
+
+enum QuizSessionState {
+  starting,
+  showing,
+  loading,
+  error,
+  finished,
+}
 
 class QuizSession with ChangeNotifier {
-  var _questions = [
-    Question("2 + 2", ["1", "2", "4"], "4", "come on"),
-    Question("Meaning of life?", ["God", "42", "Me"], "42", "H2G2"),
-    Question("May the Force be with you", ["Star Wars", "Forest Gump", "American Pie"], "Star Wars", "Skywalker"),
-  ];
-  var _score = 0;
-  var _currentQuestionIndex = 0;
-  var _showHint = false;
+  var _questionRepository;
+  var _totalQuestionCount;
+  var _currentQuestionCount = 0;
 
-  Question get currentQuestion => _currentQuestionIndex < _questions.length ? _questions[_currentQuestionIndex] : null;
-  int get score => _score;
-  String get currentQuestionHint => _showHint ? currentQuestion.hint : "";
+  // There's no `protected` visibility on Dart, so set it back to public!
+  //https://stackoverflow.com/questions/28350655/how-do-i-emulate-protected-methods-in-dart
+  var theScore = 0; // should never be accessed from the outside except from subclasses
 
-  void nextQuestion() {
-    _currentQuestionIndex++;
-    _showHint = false;
+  var _state;
+  var _hintRequested = false;
+
+  Question _currentQuestion;
+
+  QuizSessionState get state => _state;
+  Question get currentQuestion => _currentQuestion;
+  int get questionsCount => _totalQuestionCount;
+  int get score => theScore;
+  bool get hintRequested => _hintRequested;
+
+  QuizSession({QuestionRepository questionRepository, @required int totalQuestionCount}) {
+    _questionRepository = questionRepository;
+    _totalQuestionCount = totalQuestionCount;
+    _state = QuizSessionState.starting;
+  }
+
+  void nextQuestion() async {
+    _hintRequested = false;
+
+    try {
+      _currentQuestionCount++;
+      if (_currentQuestionCount > _totalQuestionCount) {
+        _currentQuestion = null;
+        _state = QuizSessionState.finished;
+      }
+      else {
+        _state = QuizSessionState.loading;
+        notifyListeners();
+        _currentQuestion = await _questionRepository.fetch();
+        _state = QuizSessionState.showing;
+      }
+    }
+    catch (error) {
+      _state = QuizSessionState.error;
+    }
+
     notifyListeners();
   }
 
   bool checkAnswer(String answer) {
-    if(_questions[_currentQuestionIndex].isCorrectAnswer(answer)){
-      _score++;
-      return true;
-    } else return false;
+    return currentQuestion.isCorrectAnswer(answer);
   }
 
-  bool isCompleted(){
-    return _currentQuestionIndex >= _questions.length;
-  }
-
-  void toogleHint(){
-    _showHint = !_showHint;
+  void requestHint() {
+    _hintRequested = true;
     notifyListeners();
   }
-  // TODO CHANGE
-  reset(){
-     _score = 0;
-    _currentQuestionIndex = 0;
-    _showHint = false;
-    notifyListeners();
-  }
-
 }

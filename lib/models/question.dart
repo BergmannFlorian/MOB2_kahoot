@@ -7,6 +7,16 @@ class Question {
 
   Question(this.caption, this.answers, this._correctAnswer, [this.hint = ""]);
 
+  factory Question.fromJson(Map<String, dynamic> json) {
+    var answers = json['answers'].cast<String>();
+    return Question(
+      json['caption'],
+      answers,
+      answers[json['correct_answer_index']],
+      json['hint']
+    );
+  }
+
   bool isCorrectAnswer(String answer) {
     return _correctAnswer == answer;
   }
