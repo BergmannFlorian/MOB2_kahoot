@@ -30,7 +30,7 @@ class QuizSession with ChangeNotifier {
   int get score => theScore;
   bool get hintRequested => _hintRequested;
 
-  QuizSession({QuestionRepository questionRepository, @required int totalQuestionCount}) {
+  QuizSession(QuestionRepository questionRepository, int totalQuestionCount) {
     _questionRepository = questionRepository;
     _totalQuestionCount = totalQuestionCount;
     _state = QuizSessionState.starting;
