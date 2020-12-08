@@ -36,6 +36,11 @@ class QuizSession with ChangeNotifier {
     _state = QuizSessionState.starting;
   }
 
+  void setFinished(){
+    _state = QuizSessionState.finished;
+    notifyListeners();
+  }
+
   void nextQuestion() async {
     _hintRequested = false;
 
