@@ -45,3 +45,31 @@ class WarriorQuizSession extends QuizSession{
     Timer(Duration(seconds: duration), super.setFinished);
   }
 }
+
+class NinjaQuizSession extends QuizSession{
+  bool _lastAnswer = true;
+  Timer timerQuestion;
+  NinjaQuizSession({QuestionRepository questionRepository}):super(questionRepository, 15){
+    startTimeoutQuiz(30);
+  }
+  bool checkAnswer(String answer) {
+    var correct = super.checkAnswer(answer);
+    if (correct) theScore++;
+    else theScore--;
+    _lastAnswer = correct;
+    return correct;
+  }
+  void nextQuestion() async {
+    if(_lastAnswer){
+      super.nextQuestion();
+      startTimeoutQuestion(3);
+    } 
+  }
+  void startTimeoutQuiz(int duration){
+    Timer(Duration(seconds: duration), super.setFinished);
+  }
+  void startTimeoutQuestion(int duration){
+    if (timerQuestion != null) timerQuestion.cancel();
+    timerQuestion = Timer(Duration(seconds: duration), super.nextQuestion);
+  }
+}
