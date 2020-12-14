@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'widgets_screen/game_list.dart';
 import 'widgets_screen/game_screen.dart';
 
 void main() => runApp(QuizApp());
@@ -12,7 +12,11 @@ class QuizApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: GameScreen(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => GameList(),
+        '/quiz': (context) => GameScreen(),
+      },
     );
   }
 }

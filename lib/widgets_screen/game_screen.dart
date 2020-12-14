@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quiz/models/remote_question_repository.dart';
@@ -8,8 +9,8 @@ import 'package:quiz/models/simple_quiz_session.dart';
 class GameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    //QuizSession session = SimpleQuizSession(questionRepository: new StaticQuestionRepository());
-    QuizSession session = SimpleQuizSession(questionRepository: new RemoteQuestionRepository("http://10.0.2.2:4567/questions/next"));
+    final  Map<String, QuizSessionType>routeParams = ModalRoute.of(context).settings.arguments;
+    QuizSession session = QuizSession.fromEnum(routeParams["type"]);
     session.nextQuestion();
 
     return Scaffold(
@@ -108,7 +109,6 @@ class GameScreen extends StatelessWidget {
           Text("${session.score} / ${session.questionsCount}", textScaleFactor: 2.0),
           ElevatedButton(
             onPressed: () {
-              // This is currently a cheating hack because we know we are the home screen!
               Navigator.pushReplacementNamed(context, "/");
             },
             child: Text("Restart", textScaleFactor: 2.0, textAlign: TextAlign.center),

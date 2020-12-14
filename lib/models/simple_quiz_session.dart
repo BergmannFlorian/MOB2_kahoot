@@ -3,7 +3,7 @@ import 'package:quiz/models/quiz_session.dart';
 
 class SimpleQuizSession extends QuizSession {
 
-  SimpleQuizSession({QuestionRepository questionRepository}) : super(questionRepository: questionRepository, totalQuestionCount: 10);
+  SimpleQuizSession({QuestionRepository questionRepository}) : super(questionRepository, 10);
 
   bool checkAnswer(String answer) {
     var correct = super.checkAnswer(answer);
