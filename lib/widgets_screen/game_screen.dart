@@ -64,8 +64,8 @@ class GameScreen extends StatelessWidget {
     var answerButtons = question.answers.map((answer) {
       return ElevatedButton(
         onPressed: () {
-          session.checkAnswer(answer);
-          session.nextQuestion();
+          if (session.checkAnswer(answer))
+            session.nextQuestion();
         },
         child: SizedBox(
           width: double.infinity,
@@ -109,7 +109,7 @@ class GameScreen extends StatelessWidget {
           Text("${session.score} / ${session.questionsCount}", textScaleFactor: 2.0),
           ElevatedButton(
             onPressed: () {
-              Navigator.pushReplacementNamed(context, "/");
+              Navigator.pop(context, "/");
             },
             child: Text("Restart", textScaleFactor: 2.0, textAlign: TextAlign.center),
           ),

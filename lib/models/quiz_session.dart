@@ -16,8 +16,8 @@ enum QuizSessionState {
 enum QuizSessionType {
   rookie,
   journeyman,
-  ninja,
   warrior,
+  ninja,
 }
 class QuizSession with ChangeNotifier {
   var _questionRepository;
@@ -49,13 +49,13 @@ class QuizSession with ChangeNotifier {
     var questionRepository = local ? new StaticQuestionRepository() : new RemoteQuestionRepository("http://10.0.2.2:4567/questions/next");
     switch(type){
       case QuizSessionType.rookie:
-        return RookieQuizSession(questionRepository: questionRepository);
+        return RookieQuizSession(questionRepository);
       case QuizSessionType.journeyman:
-        return JourneymanQuizSession(questionRepository: questionRepository);
+        return JourneymanQuizSession(questionRepository);
       case QuizSessionType.ninja:
-        return NinjaQuizSession(questionRepository: questionRepository);
+        return NinjaQuizSession(questionRepository);
       case QuizSessionType.warrior:
-        return WarriorQuizSession(questionRepository: questionRepository);
+        return WarriorQuizSession(questionRepository);
       default:
         return QuizSession(questionRepository, 10);
     }
